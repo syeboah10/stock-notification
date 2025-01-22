@@ -30,25 +30,21 @@ public class FirebaseService {
 
             DocumentReference userDocRef = firestore.document(documentPath);
 
-            // Check if the user document exists
             ApiFuture<DocumentSnapshot> future = userDocRef.get();
-            DocumentSnapshot document = future.get(); // This is blocking; consider alternatives for async
+            DocumentSnapshot document = future.get();
 
             if (!document.exists()) {
-                // Initialize the user document if it doesn't exist
                 Map<String, Object> userData = new HashMap<>();
-                userDocRef.set(userData); // Creates an empty document for the user
+                userDocRef.set(userData);
                 System.out.println("User document created: " + request.getUserEmail());
             }
 
-            // Create data map for the stock
             Map<String, Object> stockData = new HashMap<>();
             stockData.put("stockSymbol", request.getStockSymbol());
             stockData.put("averageStockPrice", request.getAverageStockPrice());
             stockData.put("lowThreshold", request.getPriceRanges().getLow());
             stockData.put("highThreshold", request.getPriceRanges().getHigh());
 
-            // Add the stock data to the user's watchlist
             userDocRef
                     .collection("stocks")
                     .document(request.getStockSymbol())
@@ -63,16 +59,12 @@ public class FirebaseService {
     public  List<QueryDocumentSnapshot> getWatchlistData() throws ExecutionException, InterruptedException, ExecutionException {
         List<QueryDocumentSnapshot> allStocks = new ArrayList<>();
 
-        // Get the "watchlists" collection
         CollectionReference watchlistCollection = firestore.collection("users");
 
-        // Fetch all watchlist documents
         ApiFuture<QuerySnapshot> watchlistSnapshotFuture = watchlistCollection.get();
         QuerySnapshot watchlistSnapshot = watchlistSnapshotFuture.get();
 
-        // Iterate through each watchlist document
         for (DocumentSnapshot userDocSnapshot : watchlistSnapshot.getDocuments()) {
-            // Access the "stocks" subcollection for each user
             CollectionReference stocksCollection = userDocSnapshot.getReference().collection("stocks");
 
             ApiFuture<QuerySnapshot> stocksSnapshotFuture = stocksCollection.get();

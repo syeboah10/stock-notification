@@ -59,14 +59,11 @@ public class NotificationService {
         else if (stockResponse.getC() < lowerBound) {
             sendMail("LowerBound Passed Notification", stockResponse, stock);
         }
-        System.out.println(req);
         return req.toString();
     }
 
     public void sendMail(String messageType,  StockApiController.StockResponsePOJO response, String stock ){
         emailSender.sendEmail("sy433@cornell.edu", messageType, response.toString(stock));
     }
-
-    //create another scheduler, that hust sendyou an update of your portfolio ever 6 hours without having to check
 
 }

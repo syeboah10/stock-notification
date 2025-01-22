@@ -24,17 +24,16 @@ public class StockApiController {
         this.firebaseService = firebaseService;
         this.notificationService = notificationService;
     }
-    //@GetMapping("/{symbol}")
+
     public ResponseEntity<StockResponsePOJO> getStockData( String symbol) {
         System.out.println("inside");
         RestTemplate restTemplate = new RestTemplate();
         try {
-            // Making the API call
             StockResponsePOJO response = restTemplate.getForObject(BASE_URL, StockResponsePOJO.class, symbol, API_TOKEN);
             System.out.println(response.getC());
             return ResponseEntity.ok(response);
         } catch (Exception e) {
-            return ResponseEntity.status(500).body(null); // Return error status
+            return ResponseEntity.status(500).body(null);
         }
     }
 
@@ -48,11 +47,11 @@ public class StockApiController {
         }
     }
 
-    @Data // Lombok annotation to generate getters, setters, toString, etc.
+    @Data
     static class StockResponsePOJO {
         private double c; // Current price
-        private double h;
-        private double l;
+        private double h; // Day High
+        private double l; // Day Low
         private double o;
         private double pc;
 
@@ -62,22 +61,7 @@ public class StockApiController {
 
         }
     }
-//
-//    @Data
-//    private static class StockSearchPOJO {
-//
-//        private int count;
-//        private List<ResultPOJO> results;
-//
-//    }
-//    @Data
-//    private static class ResultPOJO {
-//        private String description;
-//        private String displaySymbol;
-//
-//        private String symbol;
-//
-//    }
+
 }
 
 

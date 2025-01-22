@@ -9,7 +9,7 @@ public class GmailApiEmailSender {
     private final String username;
     private final String password;
     private final String host = "smtp.gmail.com";
-    private final int port = 587; // TLS port
+    private final int port = 587;
 
     public GmailApiEmailSender() {
         this.username = "kembathedon5";
